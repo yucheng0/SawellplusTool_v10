@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">SawellplusTool</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="chinese">Chinese</string>
+    <string name="english">English</string>
+    <string name="account">Account</string>
+    <string name="password">Password</string>
+
+    <string name="simplifiedchinese">Simplified Chinese</string>
+
+
+    <string name="inputfilename">Input File name </string>
+    <string name="ok" translatable="false">Ok </string>
+    <string name="input_you_rename" translatable="false">Input you Rename </string>
+    <string name="input_dir_name" translatable="false">Input Dir name </string>
+    <string name="modify_success" translatable="false">modify_success </string>
+    <string name="modify_fail" translatable="false">modify_fail</string>
+    <string name="make_sure_del" translatable="false">make_sure_del</string>
+    <string name="del_success" translatable="false">del_success</string>
+    <string name="del_fail" translatable="false">del_fail</string>
+
+    <string name="cancel" translatable="false">cancel</string>
+    <string name="create_dir_fail" translatable="false">create_dir_fail</string>
+    <string name="create_dir_success" translatable="false">create_dir_success</string>
+    <string name="file_is_not_exist" translatable="false">file_is_not_exists</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+</resources>

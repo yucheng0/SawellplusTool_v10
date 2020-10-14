@@ -1,0 +1,720 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragmainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:background="@drawable/fourboxs"
+    android:orientation="vertical"
+    tools:context=".mainFragment">
+
+    <LinearLayout
+        android:id="@+id/linearLayoutV0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewBackKey"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_baseline_arrow_back_ios_24"
+                android:text="Back"
+                android:textColor="#ffffffff"
+                android:textSize="30dp" />
+
+            <ImageView
+                android:id="@+id/imgfile"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:layout_weight="1"
+                android:src="@drawable/ic_baseline_save_24" />
+
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/scrollView0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+                <!-- Information -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="Infomation"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#8BC34A"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textView"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Connect Status"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Not Connect"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textViewWifiVersionLable"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="WIFI Version"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                        <TextView
+                            android:id="@+id/textViewWifiVersion"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="v1.73"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textViewMacAddressLable"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="MAC Address"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                        <TextView
+                            android:id="@+id/textViewMacAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="00:00:00:00:00:00"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Serial Number"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                        <TextView
+                            android:id="@+id/textViewSerialNumber"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="0000000"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- WIFI 2.4G Settings -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="WIFI 2.4G Settings"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20dp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#8BC34A"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Band Switch 2.4G"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerBandSwitch2_4G"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="SSID 2.4GHz"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/editText2.4G"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/fourboxs"
+                            android:ems="10"
+                            android:inputType="textPersonName"
+                            android:maxLength="34"
+                            android:paddingLeft="10dp"
+                            android:text=""
+                            android:textColor="#ff000000"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Password_2_4G"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/editTextPassword_2_4G"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/fourboxs"
+                            android:ems="10"
+                            android:inputType="textPersonName"
+                            android:maxLength="64"
+                            android:paddingLeft="10dp"
+                            android:text=""
+                            android:textColor="#ff000000"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!--  Wifi 5G Setting -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="WIFI 5G Settings"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#8BC34A"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Band Switch 5G"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerBandSwitch5G"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="SSID 5GHz"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/editText5G"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/fourboxs"
+                            android:ems="10"
+                            android:inputType="textPersonName"
+                            android:maxLength="34"
+                            android:paddingLeft="10dp"
+                            android:text=""
+                            android:textColor="#ff000000"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Password_5G"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/editTextPassword_5G"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/fourboxs"
+                            android:ems="10"
+                            android:inputType="textPersonName"
+                            android:maxLength="64"
+                            android:paddingLeft="10dp"
+                            android:text=""
+                            android:textColor="#ff000000"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!--  EAP Setting -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="EAP Settings"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20dp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#8BC34A"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="EAP Method"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerEapMethod"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="EAP Inner Method"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerEapInnerMethod"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="#FFFFFF" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="EAP User ID"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/editTextEapUserId"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/fourboxs"
+                            android:ems="10"
+                            android:inputType="textPersonName"
+                            android:maxLength="34"
+                            android:paddingLeft="10dp"
+                            android:text=""
+                            android:textColor="#ff000000"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="EAP User Password"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/editTextEapUserPassword"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/fourboxs"
+                            android:ems="10"
+                            android:inputType="textPersonName"
+                            android:maxLength="64"
+                            android:paddingLeft="10dp"
+                            android:text=""
+                            android:textColor="#ff000000"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+                <!-- Sg Ip Setting -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="SG IP Settings"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#8BC34A"
+                    android:paddingLeft="15dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+
+                            android:text="SG IP Switch"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerSGIPSwitch"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="15"
+                            android:text="SG IP"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/editTextSgIp1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:background="@drawable/fourboxs"
+                            android:ems="10"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:text="0"
+                            android:textColor="#ff000000"
+                            android:textSize="18dp"
+                            tools:ignore="OnClick" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="."
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/editTextSgIp2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:background="@drawable/fourboxs"
+                            android:ems="10"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:text="0"
+                            android:textColor="#ff000000"
+                            android:textSize="18dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="."
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/editTextSgIp3"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:background="@drawable/fourboxs"
+                            android:ems="10"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:text="0"
+                            android:textColor="#ff000000"
+                            android:textSize="18dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="."
+                            android:textColor="#FFFFFF"
+                            android:textSize="18dp" />
+
+                        <EditText
+                            android:id="@+id/editTextSgIp4"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:background="@drawable/fourboxs"
+                            android:ems="10"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:text="0"
+                            android:textColor="#ff000000"
+                            android:textSize="18dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:background="#FFAB00"
+                        android:id="@+id/btnSubmit"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentBottom="true"
+                        android:textSize="18dp"
+                         android:text="Submit" />
+
+                    <Button
+                        android:id="@+id/btnQrCode"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:background="#FFAB00"
+                        android:text="SCan\nQRcode"
+                        android:textSize="18dp" />
+
+                    <Button
+                        android:id="@+id/btnReConnect"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="true"
+                        android:background="#FFAB00"
+                        android:text="Re\nConnect"
+                        android:textSize="18dp" />
+                </RelativeLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:id="@+id/frameLayout01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:visibility="gone"
+        android:alpha="1">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+        <GridView
+            android:gravity="left"
+            android:id="@+id/main_page_gridview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>
+    </FrameLayout>
+
+
+</FrameLayout>

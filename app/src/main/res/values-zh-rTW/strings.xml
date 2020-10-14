@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SawellplusTool</string>
+    <string name="chinese">中文</string>
+    <string name="english">英文</string>
+    <string name="account">帳號</string>
+    <string name="password">密碼</string>
+    <string name="simplifiedchinese">繁體</string>
+    <string name="inputfilename">請輸入檔案名稱</string>
+</resources>
