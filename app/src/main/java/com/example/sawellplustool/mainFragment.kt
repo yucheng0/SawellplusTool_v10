@@ -267,7 +267,7 @@ class mainFragment : Fragment() {
 
         btnQrCode.setOnClickListener {
             println("Qrcode")
-            val intent = Intent(context, QRCodeMainActivity::class.java)
+            val intent = Intent(context,SplashActivity::class.java)
             startActivity(intent)
         }
 

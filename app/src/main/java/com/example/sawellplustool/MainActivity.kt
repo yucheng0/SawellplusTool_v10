@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity(), WifiScanCallbackResult, WifiConnectivi
         mainFragment.myViewModel = myViewModel
         ListFragment.myViewModel = myViewModel
         QRCodeMainActivity.myViewModel = myViewModel
+        QRcodeActivity.myViewModel = myViewModel
 
         //    OPFragment.myViewModel = myViewModel
 
