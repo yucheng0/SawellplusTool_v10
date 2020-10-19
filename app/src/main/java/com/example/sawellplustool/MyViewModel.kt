@@ -1,11 +1,13 @@
 package com.example.getclubapiexample
 
 import android.os.SystemClock
+import android.util.Log
 import android.view.Menu
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sawellplustool.QRCodeMainActivity
+import com.example.sawellplustool.TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -67,7 +69,7 @@ class MyViewModel : ViewModel() {
 
     private suspend fun delay500ms() { //耗時操作delay
         delay(500)
-
+        Log.d(TAG, "delay500ms 到")
         tcpReceiverEnabled = true                               // 去執行Receiver的接收
         tcpReceiver.value = tcpReceiver.value
 

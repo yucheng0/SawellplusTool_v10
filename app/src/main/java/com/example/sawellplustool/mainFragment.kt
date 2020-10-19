@@ -15,8 +15,6 @@ import android.widget.SimpleAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.bytearraylesson.Parser.ResponseSendDataRequest
 import com.example.bytearraylesson.Send.SendConnectioStatus
@@ -34,8 +32,8 @@ import java.io.OutputStream
 import java.net.InetSocketAddress
 import java.net.Socket
 
-const val HOSTIP = "192.168.0.104"
-const val PORT = 4000
+const val HOSTIP = "192.168.10.1"            //指Wifi AP
+const val PORT = 5001
 
 //const val DATA = "taonce"
 const val DATA = "0fff"
@@ -67,8 +65,6 @@ class mainFragment : Fragment() {
     }
 
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -95,8 +91,8 @@ class mainFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-  //     fileMenu()
-         isEnabled(true)            //重建時打開下層所有UI功能
+        //     fileMenu()
+        isEnabled(true)            //重建時打開下層所有UI功能
 
         navigationSimulationCurrentPosition = 2
 
@@ -267,15 +263,32 @@ class mainFragment : Fragment() {
 
         btnQrCode.setOnClickListener {
             println("Qrcode")
-            val intent = Intent(context,SplashActivity::class.java)
+            val intent = Intent(context, SplashActivity::class.java)
             startActivity(intent)
         }
 
+        btnReConnect.setOnClickListener {
+            val k = wifiManagerWrapper?.connectWifi(
+                "88DA1AF89BA0",
+                "00000000",
+                wifiManagerWrapper!!.WPA_WPA2_PSK,
+                MainActivity()
+            )
+            //           wifiManagerWrapper!!.WPA_WPA2_PSK,
+            //         )    //只要回應不是null 如果連錯ssid也會出現是對的   */
+            Log.d(TAG, "k:$k ")
+            if (k == null) {
+                Toast.makeText(activity, "連接不成功", Toast.LENGTH_SHORT).show()
+            }
+        }   //onClick
+
+
         // Submit 按鍵處理
         btnSubmit.setOnClickListener {
+            tcpConnect()
             //判斷是否可以傳送
-           if (checkDataContain2()){
-              //           tcpSendData(COMMAND_Client_send_connection_status_request)
+    /*        if (checkDataContain2()) {
+                //           tcpSendData(COMMAND_Client_send_connection_status_request)
                 val sendConnectioStatus = SendConnectioStatus()
                 var result = sendConnectioStatus.getReadySendData()   //取得回傳值
                 //         tcpSendData(result)
@@ -290,10 +303,10 @@ class mainFragment : Fragment() {
                 for (i in 0..result.size - 1) {
                     Log.d(TAG, "wifiParameter1: ${result[i]}")
                 }
-            }
-        }
+            } */
+        }  //submit
 
-        imgfile.setOnClickListener{
+        imgfile.setOnClickListener {
             /*
             val lunch = ArrayList<String>()
             lunch.add("Save To File")
@@ -320,24 +333,51 @@ class mainFragment : Fragment() {
 
 
         //==============  觀測數值的變化 ===============
-        Log.d(TAG, "qrcodedMyViewModel:${
-        myViewModel} ")
+        Log.d(
+            TAG, "qrcodedMyViewModel:${
+                myViewModel
+            } "
+        )
 
         myViewModel.qrcodedatafromscanner.observe(viewLifecycleOwner, Observer {
             if (myViewModel.qrcodescancompelteEnabled) {
                 myViewModel.qrcodescancompelteEnabled = false
                 //得到QRCode 後的做法->就是利用它跟機台連接了
+                val netWorkSSID1 = myViewModel.qrcodedatafromscanner.value.toString()
+
+                val k = wifiManagerWrapper?.connectWifi(
+                    netWorkSSID1,  //"88DA1AF89BA0",
+                    "00000000",
+                    wifiManagerWrapper!!.WPA_WPA2_PSK,
+                    MainActivity()
+                )
+                //           wifiManagerWrapper!!.WPA_WPA2_PSK,
+                //         )    //只要回應不是null 如果連錯ssid也會出現是對的   */
+                Log.d(TAG, "k:$k ")
+                if (k == null) {
+                    val builder = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                    builder.setTitle("Error ")
+                    builder.setMessage("AP Connect not successful please QRCode again")
+                    builder.setPositiveButton("Ok") { dialog, which ->
+                    }
+                    val alert = builder.create()
+                    alert.show()
+
+                    Toast.makeText(activity, "AP 連接不成功", Toast.LENGTH_SHORT).show()
+                } else {
+                    Log.d(TAG, "AP 連接成功 ")
+                }
                 Log.d(
                     TAG,
                     "myViewModel.qrcodedatafromscanner.value = ${myViewModel.qrcodedatafromscanner.value} "
-
                 )
-                tcpConnect()            //進行TCP連線
-                val sendConnectioStatus = SendConnectioStatus()
-                val result = sendConnectioStatus.getReadySendData()  // 我覺得這不是送, 這是得到資料準備去送
-                //         tcpSendData(result)                 // 真正送出資料（送出後就會有回應）
 
-                myViewModel.fixTimeProc()            // 每500ms讀1次TCP資料
+                if (tcpConnect()) {           //進行TCP連線  （它的提示是連接出錯）
+                    val sendConnectioStatus = SendConnectioStatus()
+                    val result = sendConnectioStatus.getReadySendData()  // 我覺得這不是送, 這是得到資料準備去送
+                    tcpSendData(result)                 // 真正送出資料（送出後就會有回應）
+                    myViewModel.fixTimeProc()            // 每500ms讀1次TCP資料
+                }
             }
         })
 // 監控500ms到時, 再次去啟動協程
@@ -355,28 +395,6 @@ class mainFragment : Fragment() {
 
 
 
-
-
-
-
-
-
-
-        btnReConnect.setOnClickListener {
-            val k = wifiManagerWrapper?.connectWifi(
-                "satest",
-                "00000000",
-                wifiManagerWrapper!!.WPA_WPA2_PSK,
-                MainActivity()
-            )
-            //           wifiManagerWrapper!!.WPA_WPA2_PSK,
-            //         )    //只要回應不是null 如果連錯ssid也會出現是對的   */
-            Log.d(TAG, "k:$k ")
-            if (k == null) {
-                Toast.makeText(activity, "連接不成功", Toast.LENGTH_SHORT).show()
-            }
-        }
-
         ListFragment.textWifi = textViewWifiVersionLable
 
         //寫檔案
@@ -384,15 +402,15 @@ class mainFragment : Fragment() {
 
             if (myViewModel.writeFileEnabled) {
                 myViewModel.writeFileEnabled = false
-      //          val r = checkDataContain()
-     //           Log.d(TAG, "r: $r ")
-      //          if (checkDataContain() == true) {//檢查檔案內容是否真的可以寫
-                    Log.d(TAG, "寫檔案: ")
-                    writeDataToFile(myViewModel.inputFileName)
-                    
-                }  //寫入檔名
+                //          val r = checkDataContain()
+                //           Log.d(TAG, "r: $r ")
+                //          if (checkDataContain() == true) {//檢查檔案內容是否真的可以寫
+                Log.d(TAG, "寫檔案: ")
+                writeDataToFile(myViewModel.inputFileName)
 
-    //        }
+            }  //寫入檔名
+
+            //        }
         })
 
 
@@ -429,7 +447,8 @@ class mainFragment : Fragment() {
 
     // 　=================         TCP 副程式開始     =====================
     // Client connect 連接
-    fun tcpConnect() {
+    fun tcpConnect():Boolean {
+        var bool = false
         GlobalScope.launch {
             mSocket = Socket()
             try {
@@ -442,15 +461,18 @@ class mainFragment : Fragment() {
                 if (mSocket!!.isConnected) {
 // sendData("taonce")
 // receiverData()
-                    activity?.runOnUiThread { textView.text = "Client 連接成功" }
+                    activity?.runOnUiThread { textViewConnectStatus.text = "Client 連接成功" }
                     //       字是紅色的
                     //         btnConnect.setTextColor(android.graphics.Color.RED)
+                    bool = true
                 }
             } catch (e: Exception) {
-                activity?.runOnUiThread { textView.text = "Client 連接出錯" }
+                activity?.runOnUiThread { textViewConnectStatus.text = "Client 連接出錯" }
                 Log.d(TAG, "连接出错：${e.message}")
+               bool = false
             }
         } //globalscope
+        return bool
     }
 
     /*動作： Client 送資料
@@ -726,9 +748,6 @@ class mainFragment : Fragment() {
     }
 
 
-
-
-
     // 文字監控
 
     val textWatcher1 = object : TextWatcher {
@@ -773,7 +792,7 @@ class mainFragment : Fragment() {
         }
 
         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-         Log.d(TAG, "p0: $p0 ")  // 回應輸入的文字
+            Log.d(TAG, "p0: $p0 ")  // 回應輸入的文字
             Log.d(TAG, "p1: $p1 ")  //它是索引值從 0 開始
             Log.d(TAG, "p2: $p2 ")
             Log.d(TAG, "p3: $p3 ")
@@ -787,10 +806,10 @@ class mainFragment : Fragment() {
             }
 
 
-      /*      if (p0.toString() == "") {
-                editTextSgIp2.setText("0")
-            }  */
-           if (p0?.length == 3 && p0.toString().toInt() > 255) {               //等於2就是索引值3
+            /*      if (p0.toString() == "") {
+                      editTextSgIp2.setText("0")
+                  }  */
+            if (p0?.length == 3 && p0.toString().toInt() > 255) {               //等於2就是索引值3
                 editTextSgIp2.setText("")
             }
             if (p0?.length == 3 && p0.toString().toInt() <= 255) {               //跳到下一個輸入
@@ -824,9 +843,9 @@ class mainFragment : Fragment() {
             }
 
 
-   /*         if (p0.toString() == "") {
-                editTextSgIp3.setText("0")
-            } */
+            /*         if (p0.toString() == "") {
+                         editTextSgIp3.setText("0")
+                     } */
             if (p0?.length == 3 && p0.toString().toInt() > 255) {               //等於2就是索引值3
                 editTextSgIp3.setText("")
             }
@@ -860,9 +879,9 @@ class mainFragment : Fragment() {
             }
 
 
-  /*          if (p0.toString() == "") {
-                editTextSgIp4.setText("0")
-            }  */
+            /*          if (p0.toString() == "") {
+                          editTextSgIp4.setText("0")
+                      }  */
             if (p0?.length == 3 && p0.toString().toInt() > 255) {               //等於2就是索引值3
                 editTextSgIp4.setText("")
             }
@@ -874,14 +893,14 @@ class mainFragment : Fragment() {
 
     }
 
-/*  mEtSearch = editText 控件
-    https://juejin.im/post/6844904164632297479
- */
-  fun hideSoftInput() {
-    Log.d(TAG, "hideSoftInput: ")
-      val inputManager = requireActivity()
-           .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-     inputManager.hideSoftInputFromWindow(editTextSgIp1.windowToken, 0)
+    /*  mEtSearch = editText 控件
+        https://juejin.im/post/6844904164632297479
+     */
+    fun hideSoftInput() {
+        Log.d(TAG, "hideSoftInput: ")
+        val inputManager = requireActivity()
+            .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(editTextSgIp1.windowToken, 0)
     }
 
     fun checkDataContain2(): Boolean {
@@ -893,7 +912,7 @@ class mainFragment : Fragment() {
                 val builder = AlertDialog.Builder(requireContext())
                 builder.setTitle("錯誤 ")
                 builder.setMessage("2.4GHz / 5GHz Band Switch 必須不可同時為Diabled ")
-                builder.setPositiveButton("Ok") { dialog, which ->  }
+                builder.setPositiveButton("Ok") { dialog, which -> }
                 val alert = builder.create()
                 alert.show()
             }
@@ -957,12 +976,16 @@ class mainFragment : Fragment() {
     }
 
 
-    fun fileMenu(){
+    fun fileMenu() {
 
         isEnabled(false)
 
-        val image = intArrayOf(R.drawable.ic_baseline_save_alt_24, R.drawable.ic_baseline_restore_24,R.drawable.ic_baseline_cancel_24)
-        val imgText = arrayOf("Save", "Restore","Cancel")
+        val image = intArrayOf(
+            R.drawable.ic_baseline_save_alt_24,
+            R.drawable.ic_baseline_restore_24,
+            R.drawable.ic_baseline_cancel_24
+        )
+        val imgText = arrayOf("Save", "Restore", "Cancel")
 
         val items = ArrayList<Map<String, Any>>()    //List<＞　括號是型別，Map<String,Any> 就是型別
         for (i in image.indices) {
@@ -974,106 +997,108 @@ class mainFragment : Fragment() {
 /* SimpleAdapter 需要map  (image1 對應R.id.image ; text1 對應 R.id.text  ==> 即1張圖1個文字
 items HasMap, 資料內容
 */
-        val adapter = SimpleAdapter(requireContext(),
+        val adapter = SimpleAdapter(
+            requireContext(),
             items, R.layout.filemenulayout, arrayOf("image1", "text1"),
-            intArrayOf(R.id.image, R.id.text))
+            intArrayOf(R.id.image, R.id.text)
+        )
 
         main_page_gridview.numColumns = 1 // 分3列, 它其實也是listview的應用 （顯示3欄的排列）
 // girdview的adapter就要找另一個adapter來銜接, 那它就找到adapter 是一個simpleAdapter
         main_page_gridview.adapter = adapter    //對接adapter
 
-        main_page_gridview.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+        main_page_gridview.onItemClickListener =
+            AdapterView.OnItemClickListener { _, _, position, _ ->
 
-          if (position == 0 ) {               //選到Save
-              //           Toast.makeText(requireContext(), "你選擇了" + imgText[position], Toast.LENGTH_SHORT).show()
-              isEnabled(true)                                 //恢復正常
+                if (position == 0) {               //選到Save
+                    //           Toast.makeText(requireContext(), "你選擇了" + imgText[position], Toast.LENGTH_SHORT).show()
+                    isEnabled(true)                                 //恢復正常
 //
-              val item = LayoutInflater.from(requireContext()).inflate(R.layout.itemlayout, null)
-              AlertDialog.Builder(requireContext())   //顯示對話框
-                  .setTitle(R.string.inputfilename)
-                  .setView(item)
+                    val item =
+                        LayoutInflater.from(requireContext()).inflate(R.layout.itemlayout, null)
+                    AlertDialog.Builder(requireContext())   //顯示對話框
+                        .setTitle(R.string.inputfilename)
+                        .setView(item)
 
-                  .setPositiveButton(R.string.ok)
-                  { dialog, which ->
+                        .setPositiveButton(R.string.ok)
+                        { dialog, which ->
 
-           //           val myViewModel = ViewModelProvider(viewLifecycleOwner).get(MyViewModel::class.java)
+                            //           val myViewModel = ViewModelProvider(viewLifecycleOwner).get(MyViewModel::class.java)
 
-                      val i = item.edit_text.getText().toString()
-                      Log.d(TAG, "i:$i ")
+                            val i = item.edit_text.getText().toString()
+                            Log.d(TAG, "i:$i ")
 
-                      when {
-                          i == "" -> {
-                              val builder = AlertDialog.Builder(requireContext())
-                              builder.setTitle("錯誤 ")
-                              builder.setMessage("檔名不得為空")
-                              builder.setNegativeButton("Ok") { dialog, which -> }
-                              val alert = builder.create()
-                              alert.show()
-                          }
+                            when {
+                                i == "" -> {
+                                    val builder = AlertDialog.Builder(requireContext())
+                                    builder.setTitle("錯誤 ")
+                                    builder.setMessage("檔名不得為空")
+                                    builder.setNegativeButton("Ok") { dialog, which -> }
+                                    val alert = builder.create()
+                                    alert.show()
+                                }
 //不允許檔案字元判斷
-                          i.contains(">") ||
-                                  i.contains("/") || i.contains("*") ||
-                                  i.contains("?") || i.contains("\\") ||
-                                  i.contains(",") || i.contains("<") ||
-                                  i.contains("|") || i.contains(":") -> {
+                                i.contains(">") ||
+                                        i.contains("/") || i.contains("*") ||
+                                        i.contains("?") || i.contains("\\") ||
+                                        i.contains(",") || i.contains("<") ||
+                                        i.contains("|") || i.contains(":") -> {
 
-                              val builder = AlertDialog.Builder(requireContext())
-                              builder.setTitle("錯誤 ")
-                              builder.setMessage("檔名內容有特殊字元 /  \\  ? , < > | * :  ")
-                              builder.setNegativeButton("Ok") { dialog, which -> }
-                              val alert = builder.create()
-                              alert.show()
-                          }
-                          else -> {
-                              //得到輸入檔案名
-                              if (checkDataContain2()) {            //判斷沒有錯誤再執行, 有錯誤不執行
-                                  myViewModel.inputFileName = item.edit_text.getText().toString()
-                                  Log.d(TAG, "myViewModelofmainactivity: ${myViewModel}")
-                                  myViewModel.writeFileEnabled = true
-                                  myViewModel.writeFileLiveData.value =
-                                      myViewModel.writeFileLiveData.value
-                              }
-                          }
-                      }
+                                    val builder = AlertDialog.Builder(requireContext())
+                                    builder.setTitle("錯誤 ")
+                                    builder.setMessage("檔名內容有特殊字元 /  \\  ? , < > | * :  ")
+                                    builder.setNegativeButton("Ok") { dialog, which -> }
+                                    val alert = builder.create()
+                                    alert.show()
+                                }
+                                else -> {
+                                    //得到輸入檔案名
+                                    if (checkDataContain2()) {            //判斷沒有錯誤再執行, 有錯誤不執行
+                                        myViewModel.inputFileName =
+                                            item.edit_text.getText().toString()
+                                        Log.d(TAG, "myViewModelofmainactivity: ${myViewModel}")
+                                        myViewModel.writeFileEnabled = true
+                                        myViewModel.writeFileLiveData.value =
+                                            myViewModel.writeFileLiveData.value
+                                    }
+                                }
+                            }
 
-                  }   //.setPositiveButton = ok
+                        }   //.setPositiveButton = ok
 
-                  .setNegativeButton("取消 ") { _, _ ->
-                      Log.d(TAG, "inputfilename cancel: ")
-                      //         readDataFromFile()
-                  }
-                  .show()
-          }
-
-
-            if (position == 1 ){             //選到Restore
-                findNavController().navigate(R.id.listFragment)   //跳到另一個fragment
-            }
+                        .setNegativeButton("取消 ") { _, _ ->
+                            Log.d(TAG, "inputfilename cancel: ")
+                            //         readDataFromFile()
+                        }
+                        .show()
+                }
 
 
-            if(position==2) {
-                isEnabled(true)
-            }
+                if (position == 1) {             //選到Restore
+                    findNavController().navigate(R.id.listFragment)   //跳到另一個fragment
+                }
+
+
+                if (position == 2) {
+                    isEnabled(true)
+                }
 //============
 
 
-
-
-        }
-
+            }
 
 
     }
 
 
-    fun isEnabled(bool:Boolean) {
+    fun isEnabled(bool: Boolean) {
 
         if (bool == true) {
             frameLayout01.visibility = View.GONE
-            linearLayoutV0.alpha=1.0f
+            linearLayoutV0.alpha = 1.0f
         } else {
             frameLayout01.visibility = View.VISIBLE
-            linearLayoutV0.alpha=0.1f
+            linearLayoutV0.alpha = 0.1f
         }
 
 
@@ -1101,7 +1126,6 @@ items HasMap, 資料內容
         btnReConnect.isEnabled = bool
         textViewBackKey.isEnabled = bool
     }
-
 
 
 }
