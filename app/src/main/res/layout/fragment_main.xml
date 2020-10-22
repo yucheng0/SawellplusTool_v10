@@ -44,6 +44,20 @@
 
         </LinearLayout>
 
+        <!--  TEST sTART-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textViewMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!--  TEST end-->
+
+
         <ScrollView
             android:id="@+id/scrollView0"
             android:layout_width="match_parent"
@@ -59,8 +73,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginBottom="5dp"
                     android:text="Infomation"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20dp" />
@@ -180,9 +194,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="5dp"
                     android:text="WIFI 2.4G Settings"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20dp" />
@@ -282,9 +296,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="5dp"
                     android:text="WIFI 5G Settings"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20dp" />
@@ -384,9 +398,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="5dp"
                     android:text="EAP Settings"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20dp" />
@@ -512,9 +526,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="5dp"
                     android:text="SG IP Settings"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20dp" />
@@ -523,8 +537,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#8BC34A"
-                    android:paddingLeft="15dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingLeft="15dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -652,22 +666,22 @@
                 </LinearLayout>
 
                 <RelativeLayout
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="20dp">
 
                     <Button
-                        android:background="#FFAB00"
                         android:id="@+id/btnSubmit"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentBottom="true"
-                        android:textSize="18dp"
-                         android:text="Submit" />
+                        android:background="#FFAB00"
+                        android:text="Submit"
+                        android:textSize="18dp" />
 
                     <Button
                         android:id="@+id/btnQrCode"
@@ -702,19 +716,21 @@
         android:layout_marginLeft="100dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
-        android:visibility="gone"
-        android:alpha="1">
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-        <GridView
-            android:gravity="left"
-            android:id="@+id/main_page_gridview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        android:alpha="1"
+        android:visibility="gone">
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <GridView
+                android:id="@+id/main_page_gridview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left" />
+
+        </LinearLayout>
     </FrameLayout>
 
 

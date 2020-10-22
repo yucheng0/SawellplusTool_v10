@@ -23,7 +23,7 @@ companion object {
     var counter = 0
 }
 
-    fun send(): ByteArray {
+    fun getReadySendData(): ByteArray {
         b1.set(6,counter.toByte())
         //計算cs
         var r = 0

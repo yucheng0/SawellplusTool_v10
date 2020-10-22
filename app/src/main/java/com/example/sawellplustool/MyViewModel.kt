@@ -1,6 +1,5 @@
 package com.example.getclubapiexample
 
-import android.os.SystemClock
 import android.util.Log
 import android.view.Menu
 import androidx.lifecycle.MutableLiveData
@@ -31,28 +30,48 @@ class MyViewModel : ViewModel() {
     var next = 0L
     var tcpReceiverEnabled = false
     var tcpReceiverDoing = false
-    var tcpReceiver = MutableLiveData<Int>()            //觀測值的變化
-    var tcpReceiverData = ArrayList<String>()          //從tcp所讀到的資料存在此
+    var tcpReceiverLiveData = MutableLiveData<Int>()            //觀測值的變化
+    var tcpReceivedData = ArrayList<Int>()          //從tcp所讀到的資料存在此
     var connectStatus1 = MutableLiveData<Boolean>()
+    var keepAliveEnabled = false
+    var keepAliveLiveData = MutableLiveData<Int>()
 
     init {
         qrcodedatafromscanner.value = ""
-        tcpReceiver.value = 0
+        tcpReceiverLiveData.value = 0
     }
+
+
+    fun tcpKeepAliveTime() {
+        viewModelScope.launch(Dispatchers.Main) {
+            keepAlivedelay2000ms()
+        }
+    }
+
+    private suspend fun keepAlivedelay2000ms() { //耗時操作delay
+        delay(20000)
+        Log.d(TAG, "delay2s 到")
+//去執行KeepAliveTim
+        QRCodeMainActivity.myViewModel.keepAliveEnabled = true
+        QRCodeMainActivity.myViewModel.keepAliveLiveData.value = QRCodeMainActivity.myViewModel.keepAliveLiveData.value
+    }
+
 
     fun startQrCodeTimeOutDetect(){
      var job = viewModelScope.launch(Dispatchers.Main) {
-            delay20000ms()              //20sec Timeout
+            delay1000ms()              //20sec Timeout
     }
+ //       job.cancel()
+
     }
 
-    private suspend fun delay20000ms() { //耗時操作delay
-        delay(20000)
+    private suspend fun delay1000ms() { //耗時操作delay
+        delay(1000)
+
 //去執行Timeout
         QRCodeMainActivity.myViewModel.timeoutEnabled = true
         QRCodeMainActivity.myViewModel.timeoutLiveData.value = QRCodeMainActivity.myViewModel.timeoutLiveData.value
     }
-
 
 
     fun fixTimeProc() {
@@ -71,7 +90,7 @@ class MyViewModel : ViewModel() {
         delay(500)
         Log.d(TAG, "delay500ms 到")
         tcpReceiverEnabled = true                               // 去執行Receiver的接收
-        tcpReceiver.value = tcpReceiver.value
+        tcpReceiverLiveData.value = tcpReceiverLiveData.value
 
     }
 }

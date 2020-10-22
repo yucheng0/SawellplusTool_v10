@@ -17,8 +17,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.bytearraylesson.Parser.ResponseSendDataRequest
+import com.example.bytearraylesson.ResponseConnectionStatus
 import com.example.bytearraylesson.Send.SendConnectioStatus
-import com.example.bytearraylesson.Send.SendDataToDevice
+import com.example.bytearraylesson.Send.SendKeepAliveWithCounter
 import com.example.getclubapiexample.MyViewModel
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -41,6 +42,13 @@ const val COMMAND_Client_send_connection_status_request = "55FE04FF0201010590"
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+enum class wifiProtocol {
+    connectionStatus ,
+    wifiParameter,
+    KeepAlive,
+    ResetRequest
+
+}
 
 class mainFragment : Fragment() {
 
@@ -54,6 +62,10 @@ class mainFragment : Fragment() {
     var sSocket: Socket? = null  // 伺服器端
     var outputStream: OutputStream? = null
     var inputStream: InputStream? = null
+    var sendConnectioStatusCounter = 0
+    var sendWifiParameterCounter = 0
+    var sendKeepAliverCounter= 0
+    var sendResetRequest = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -287,23 +299,23 @@ class mainFragment : Fragment() {
         btnSubmit.setOnClickListener {
             tcpConnect()
             //判斷是否可以傳送
-    /*        if (checkDataContain2()) {
-                //           tcpSendData(COMMAND_Client_send_connection_status_request)
-                val sendConnectioStatus = SendConnectioStatus()
-                var result = sendConnectioStatus.getReadySendData()   //取得回傳值
-                //         tcpSendData(result)
-                for (i in 0..result.size - 1) {
-                    Log.d(TAG, "wifiParameter0: ${result[i]}")
-                }
+            /*        if (checkDataContain2()) {
+                        //           tcpSendData(COMMAND_Client_send_connection_status_request)
+                        val sendConnectioStatus = SendConnectioStatus()
+                        var result = sendConnectioStatus.getReadySendData()   //取得回傳值
+                        //         tcpSendData(result)
+                        for (i in 0..result.size - 1) {
+                            Log.d(TAG, "wifiParameter0: ${result[i]}")
+                        }
 
-                //第2種傳送
-                val sendDataToDevice = SendDataToDevice()
-                result = sendDataToDevice.getReadySendData()
-                //          tcpSendData(result)          //真的送出去
-                for (i in 0..result.size - 1) {
-                    Log.d(TAG, "wifiParameter1: ${result[i]}")
-                }
-            } */
+                        //第2種傳送
+                        val sendDataToDevice = SendDataToDevice()
+                        result = sendDataToDevice.getReadySendData()
+                        //          tcpSendData(result)          //真的送出去
+                        for (i in 0..result.size - 1) {
+                            Log.d(TAG, "wifiParameter1: ${result[i]}")
+                        }
+                    } */
         }  //submit
 
         imgfile.setOnClickListener {
@@ -371,24 +383,40 @@ class mainFragment : Fragment() {
                     TAG,
                     "myViewModel.qrcodedatafromscanner.value = ${myViewModel.qrcodedatafromscanner.value} "
                 )
+                tcpConnect()
 
-                if (tcpConnect()) {           //進行TCP連線  （它的提示是連接出錯）
-                    val sendConnectioStatus = SendConnectioStatus()
-                    val result = sendConnectioStatus.getReadySendData()  // 我覺得這不是送, 這是得到資料準備去送
-                    tcpSendData(result)                 // 真正送出資料（送出後就會有回應）
-                    myViewModel.fixTimeProc()            // 每500ms讀1次TCP資料
-                }
+                /*               if (tcpConnect()) {           //進行TCP連線  （它的提示是連接出錯）
+                                   val sendConnectioStatus = SendConnectioStatus()
+                                   val result = sendConnectioStatus.getReadySendData()  // 我覺得這不是送, 這是得到資料準備去送
+                                   tcpSendData(result)                 // 真正送出資料（送出後就會有回應）
+                                   myViewModel.fixTimeProc()            // 每500ms讀1次TCP資料
+                               } */
             }
         })
 // 監控500ms到時, 再次去啟動協程
 
 //有值的變化,就去讀資料
-        myViewModel.tcpReceiver.observe(viewLifecycleOwner, Observer {
+        myViewModel.keepAliveLiveData.observe(viewLifecycleOwner, Observer {
+            if (myViewModel.keepAliveEnabled) {
+                myViewModel.keepAliveEnabled = false
+                myViewModel.tcpKeepAliveTime()              //繼續每2sec一次的KeepAlive傳送
+//送
+                val sendKeepAliveWithCounter = SendKeepAliveWithCounter()
+                val result =
+                    sendKeepAliveWithCounter.getReadySendData()  // 我覺得這不是送, 這是得到資料準備去送,  // 有回傳ByteArray指標
+                tcpSendData(result)                 // 真正送出資料（送出後就會有回應）
+                //      myViewModel.fixTimeProc()           // 啟動接收的 (已經啟動）
+            }
+        })
+
+
+
+        myViewModel.tcpReceiverLiveData.observe(viewLifecycleOwner, Observer {
             if (myViewModel.tcpReceiverEnabled) {
                 myViewModel.tcpReceiverEnabled = false
                 myViewModel.fixTimeProc()                //啟動協程500ms
                 if (!(myViewModel.tcpReceiverDoing)) {
-                    //                 tcpReceiverData()           //讀資料, 資料讀完放在viewmodel.tcpReceiverData
+                    tcpReceiverData()           //讀資料, 資料讀完放在viewmodel.tcpReceiverData
                 }
             }
         })
@@ -409,8 +437,6 @@ class mainFragment : Fragment() {
                 writeDataToFile(myViewModel.inputFileName)
 
             }  //寫入檔名
-
-            //        }
         })
 
 
@@ -434,7 +460,6 @@ class mainFragment : Fragment() {
 
 }*/
 
-
         //SGIP 監控
         editTextSgIp1.addTextChangedListener(textWatcher1)
         editTextSgIp2.addTextChangedListener(textWatcher2)
@@ -447,7 +472,7 @@ class mainFragment : Fragment() {
 
     // 　=================         TCP 副程式開始     =====================
     // Client connect 連接
-    fun tcpConnect():Boolean {
+    fun tcpConnect(): Boolean {
         var bool = false
         GlobalScope.launch {
             mSocket = Socket()
@@ -465,11 +490,20 @@ class mainFragment : Fragment() {
                     //       字是紅色的
                     //         btnConnect.setTextColor(android.graphics.Color.RED)
                     bool = true
+
+                    //連線成功後, 執行開始通訊的動作, 是否要delay一下
+                    val sendConnectioStatus = SendConnectioStatus()
+                    val result = sendConnectioStatus.getReadySendData()  // 我覺得這不是送, 這是得到資料準備去送
+                    tcpSendData(result)                 // 真正送出資料（送出後就會有回應）
+                    sendConnectioStatusCounter++
+                    myViewModel.fixTimeProc()            // 每500ms讀1次TCP資料(讀資料）
+                    //
+                    //                myViewModel.tcpKeepAliveTime()      //啟動keepAlive
                 }
             } catch (e: Exception) {
                 activity?.runOnUiThread { textViewConnectStatus.text = "Client 連接出錯" }
                 Log.d(TAG, "连接出错：${e.message}")
-               bool = false
+                bool = false
             }
         } //globalscope
         return bool
@@ -482,9 +516,16 @@ class mainFragment : Fragment() {
         GlobalScope.launch {
             if (mSocket!!.isConnected) {
                 Log.d(TAG, "SendData 我進來了 ")
-                Log.d(TAG, "mSocket,$mSocket")
+                //          Log.d(TAG, "mSocket,$mSocket")
                 try {
                     outputStream = mSocket?.getOutputStream()
+
+                    var s = ""
+                    for (i in msg) {
+                        s = s + i
+                    }
+                    Log.d(TAG, "s: $s")
+                 //   textViewMessage.text ="Tx:" + textViewMessage.text.toString() + s + "\n"
                     /*                  val size = message.length / 2  // 忽略奇數值, 若輸入3個字串只處理1個byte
                                       val msg = ByteArray(size)           // 取得size
 
@@ -512,20 +553,19 @@ class mainFragment : Fragment() {
     fun tcpReceiverData() {
         GlobalScope.launch {
             if (mSocket!!.isConnected) {
-                //              myViewModel.tcpReceiverDoing = true    //正在做
+                myViewModel.tcpReceiverDoing = true    //正在做
                 Log.d(TAG, "receiverData: 接收進來了")
                 try {
                     val inputStream = mSocket?.getInputStream()
                     val data = BufferedReader(InputStreamReader(inputStream, "ISO-8859-1"))
                     val cbuf = CharArray(1024)            // 1次讀1024字元
                     var num = data.read(cbuf)              // 這是阻塞式,就是一直等到有值為止
-                    //                  //     myViewModel.tcpReceiverData.clear()     // 清空再做
+                    //     myViewModel.tcpReceiverData.clear()     // 清空再做
 //我不要字串, 我要cbuf的東西
                     for (i in 0..num - 1) {
-                        myViewModel.tcpReceiverData.add(cbuf[i].toInt().toString())
-                        Log.d(TAG, "获取服务端内容为0：${myViewModel.tcpReceiverData[i]}")   //這是10進制顯示
-                    }
-
+                      myViewModel.tcpReceivedData.add(cbuf[i].toInt())
+   //                               Log.d(TAG, "获取服务端内容为0：${myViewModel.tcpReceivedData[i]}")   //這是10進制顯示
+                 }
                     //以下是顯示debug用對我沒有太大用途
                     Log.d(TAG, "获取服务端數目为：$num")
                     var s = ""
@@ -533,14 +573,29 @@ class mainFragment : Fragment() {
                         s = s + cbuf[i].toInt().toString(16)     // 重點在toString(16)
                         Log.d(TAG, "获取服务端内容为1：${cbuf[i].toInt()}")   //這是10進制顯示
                     }
-                    //              myViewModel.tcpReceiverData = s                 // 暫存收到的資料到ViewModel
-                    activity?.runOnUiThread { textView.text = s }   //印出結果
-                    //                   myViewModel.tcpReceiverDoing = false            //做完了, 讀結束了
-//
+
+                    //   myViewModel.tcpReceiverData = s                 // 暫存收到的資料到ViewModel
+                    activity?.runOnUiThread {
+                        textViewMessage.text = "Recv:" + textViewMessage.text.toString() + s + "\n"
+                    }   //印出結果
+
+
+                    myViewModel.tcpReceiverDoing = false            //做完了, 讀結束了
+// 讀到了資料要判斷
+                    if (sendConnectioStatusCounter>0){
+                        Log.d(TAG, "進行解析: ")
+                        sendConnectioStatusCounter--              //做一次
+                      val R = ResponseConnectionStatus()
+                         R.parseCheck()
+
+                    }
+
+  //                  myViewModel.tcpKeepAliveTime()    //啟動keepAlive
+
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Log.d(TAG, "receiveData: 接收錯誤")
-                    //                  myViewModel.tcpReceiverDoing = false    //做完了,讀結束了
+                    myViewModel.tcpReceiverDoing = false    //做完了,讀結束了
                 }
             }
         } //if 結束
